@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Petualangan Rimba Angka — Game Matematika Ceria Anak SD</title>
+  <meta name="description" content="Game edukasi matematika interaktif yang seru dan ceria untuk anak SD kelas 1-6. Belajar tambah, kurang, kali, bagi, pecahan, geometri, dan soal cerita kontekstual.">
+
+  <!-- Favicon Emoji -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦁</text></svg>">
+
+  <!-- Google Fonts: Fredoka & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            game: ['"Fredoka"', 'cursive', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            ceria: {
+              kuning: '#fcd34d',
+              oranye: '#fb923c',
+              biru: '#38bdf8',
+              hijau: '#4ade80',
+              ungu: '#c084fc',
+              merah: '#f87171',
+              pink: '#f472b6',
+            }
+          },
+          animation: {
+            'bounce-slow': 'bounce 2.2s infinite',
+            'float': 'float 3s ease-in-out infinite',
+            'wiggle': 'wiggle 1s ease-in-out infinite',
+            'pop-in': 'popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)',
+            'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-12px)' },
+            },
+            wiggle: {
+              '0%, 100%': { transform: 'rotate(-4deg)' },
+              '50%': { transform: 'rotate(4deg)' },
+            },
+            popIn: {
+              '0%': { transform: 'scale(0.85)', opacity: '0' },
+              '100%': { transform: 'scale(1)', opacity: '1' },
+            },
+            pulseSoft: {
+              '0%, 100%': { transform: 'scale(1)' },
+              '50%': { transform: 'scale(1.04)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background: radial-gradient(circle at 50% 10%, #38bdf8 0%, #0284c7 40%, #0369a1 100%);
+      min-height: 100vh;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      color: #0f172a;
+    }
+
+    /* Pola Bintang Lucu di Latar */
+    .sky-pattern {
+      background-image: 
+        radial-gradient(rgba(255, 255, 255, 0.25) 2px, transparent 2px),
+        radial-gradient(rgba(253, 224, 71, 0.2) 3px, transparent 3px);
+      background-size: 40px 40px, 70px 70px;
+      background-position: 0 0, 20px 20px;
+    }
+
+    /* Tombol 3D Game yang Empuk dan Ramah Jari Anak */
+    .btn-3d {
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    .btn-3d:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.2) !important;
+    }
+
+    .btn-kuning {
+      background: #fbbf24;
+      border-bottom: 5px solid #d97706;
+      color: #78350f;
+    }
+    .btn-kuning:hover { background: #fcd34d; }
+
+    .btn-hijau {
+      background: #22c55e;
+      border-bottom: 5px solid #15803d;
+      color: #ffffff;
+    }
+    .btn-hijau:hover { background: #4ade80; }
+
+    .btn-biru {
+      background: #0ea5e9;
+      border-bottom: 5px solid #0369a1;
+      color: #ffffff;
+    }
+    .btn-biru:hover { background: #38bdf8; }
+
+    .btn-pink {
+      background: #ec4899;
+      border-bottom: 5px solid #be185d;
+      color: #ffffff;
+    }
+    .btn-pink:hover { background: #f472b6; }
+
+    .btn-oranye {
+      background: #f97316;
+      border-bottom: 5px solid #c2410c;
+      color: #ffffff;
+    }
+    .btn-oranye:hover { background: #fb923c; }
+
+    .btn-ungu {
+      background: #a855f7;
+      border-bottom: 5px solid #7e22ce;
+      color: #ffffff;
+    }
+    .btn-ungu:hover { background: #c084fc; }
+
+    /* Kartu Game Glassmorphism Lembut */
+    .card-game {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      border: 4px solid #ffffff;
+      border-radius: 28px;
+      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Balon Udara Floating Area */
+    .balloon-box {
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .balloon-box:hover {
+      transform: scale(1.1) rotate(3deg);
+    }
+    .balloon-box:active {
+      transform: scale(0.9);
+    }
+
+    #confettiCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body class="sky-pattern flex flex-col font-game antialiased">
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- TOP HEADER / NAV BAR ANAK-ANAK -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b-4 border-yellow-300 px-3 sm:px-6 py-2 shadow-lg">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
+      <!-- Logo Game -->
+      <div class="flex items-center gap-2 cursor-pointer" onclick="goToView('home')">
+        <div class="w-11 h-11 sm:w-12 sm:h-12 bg-amber-400 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl shadow-md border-2 border-yellow-200 animate-wiggle">
+          🦁
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="text-lg sm:text-xl font-extrabold text-sky-800 tracking-wide">RIMBA ANGKA</span>
+            <span class="bg-amber-400 text-amber-900 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-yellow-500 uppercase">Anak SD</span>
+          </div>
+          <p class="text-[11px] text-sky-600 font-sans font-semibold hidden sm:block">Petualangan Matematika Ceria</p>
+        </div>
+      </div>
+
+      <!-- Skor Bintang & HUD -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Bintang Terkumpul -->
+        <div class="flex items-center gap-1 bg-amber-100 border-2 border-amber-300 px-3 py-1 rounded-full shadow-inner" title="Bintang yang kamu kumpulkan">
+          <span class="text-lg animate-bounce-slow">⭐</span>
+          <span id="playerStars" class="text-amber-800 font-bold text-sm sm:text-base">0</span>
+        </div>
+
+        <!-- Level Maskot -->
+        <div class="flex items-center gap-1.5 bg-sky-100 border-2 border-sky-300 px-2.5 py-1 rounded-full shadow-inner">
+          <span id="playerAvatar" class="text-base sm:text-lg">🦁</span>
+          <span id="playerTitle" class="text-sky-900 font-bold text-xs sm:text-sm hidden md:inline">Juara Cilik</span>
+        </div>
+
+        <!-- Tombol Audio Musik & Suara -->
+        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border-2 border-slate-200">
+          <button id="btnBgm" onclick="toggleBgm()" class="w-8 h-8 rounded-xl bg-white hover:bg-yellow-100 flex items-center justify-center text-sm shadow-sm transition" title="Musik Ceria">
+            <span id="bgmIcon">🎵</span>
+          </button>
+          <button id="btnSfx" onclick="toggleSfx()" class="w-8 h-8 rounded-xl bg-white hover:bg-yellow-100 flex items-center justify-center text-sm shadow-sm transition" title="Efek Suara">
+            <span id="sfxIcon">🔊</span>
+          </button>
+        </div>
+
+        <!-- Tombol Sertifikat -->
+        <button onclick="openModal('modalCert')" class="btn-3d btn-kuning px-2.5 sm:px-3.5 py-1.5 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-1 shadow-md" title="Cetak Piagam Bintang Matematika">
+          <span>📜</span> <span class="hidden sm:inline">Piagam</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-6 flex flex-col justify-center">
+
+    <!-- ======================================================== -->
+    <!-- VIEW 1: BERANDA / PILIHAN WAHANA PERMAINAN (HOME) -->
+    <!-- ======================================================== -->
+    <section id="viewHome" class="space-y-6 animate-pop-in">
+      <!-- Banner Sapaan Ramah -->
+      <div class="card-game p-6 sm:p-8 text-center relative overflow-hidden">
+        <div class="max-w-2xl mx-auto space-y-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-yellow-100 border-2 border-yellow-300 rounded-full text-amber-800 text-xs sm:text-sm font-bold animate-pulse-soft">
+            <span>✨</span> Halo Sahabat Juara! Siap Berhitung Seru?
+          </div>
+          <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-sky-900 leading-tight">
+            Ayo Belajar <span class="text-amber-500 underline decoration-wavy decoration-yellow-300">Matematika</span> dengan Gembira!
+          </h1>
+          <p class="text-slate-600 text-sm sm:text-base font-sans font-medium">
+            Pecahkan misteri angka bersama teman-teman rimba: Leo, Kiki, Fiko, dan Mimi. Raih bintang emas sebanyak-banyaknya dan dapatkan piagam penghargaanmu!
+          </p>
+        </div>
+      </div>
+
+      <!-- Pemilihan Fase / Kelas SD -->
+      <div class="flex items-center justify-center gap-2 sm:gap-4 flex-wrap">
+        <span class="text-white text-xs sm:text-sm font-bold bg-sky-950/40 px-3 py-1.5 rounded-xl border border-white/20">Pilih Tingkat Kelas:</span>
+        <button onclick="setGrade(1)" id="btnGrade1" class="btn-3d btn-hijau px-3.5 sm:px-5 py-2 rounded-2xl text-xs sm:text-sm font-bold shadow-md">
+          🌱 Kelas 1 - 2 (Fase A)
+        </button>
+        <button onclick="setGrade(2)" id="btnGrade2" class="btn-3d btn-biru px-3.5 sm:px-5 py-2 rounded-2xl text-xs sm:text-sm font-bold shadow-md opacity-80">
+          🌿 Kelas 3 - 4 (Fase B)
+        </button>
+        <button onclick="setGrade(3)" id="btnGrade3" class="btn-3d btn-ungu px-3.5 sm:px-5 py-2 rounded-2xl text-xs sm:text-sm font-bold shadow-md opacity-80">
+          🌳 Kelas 5 - 6 (Fase C)
+        </button>
+      </div>
+
+      <!-- GRID PILIHAN WAHANA PERMAINAN (5 MODE) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pt-2">
+
+        <!-- Wahana 1: Operasi Dasar Berhitung -->
+        <div onclick="startMode('basic')" class="card-game p-5 cursor-pointer hover:-translate-y-2 transition duration-200 border-4 hover:border-amber-400 group flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-14 h-14 rounded-2xl bg-amber-100 border-2 border-amber-300 flex items-center justify-center text-3xl group-hover:scale-110 transition">
+              ➕➖
+            </div>
+            <div>
+              <span class="text-xs font-bold text-amber-600 uppercase tracking-wider">Wahana 1</span>
+              <h3 class="text-xl font-bold text-slate-800">Taman Berhitung Ceria</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-500 font-sans">
+              Latihan penjumlahan, pengurangan, perkalian, dan pembagian dengan bantuan gambar buah yang lezat!
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-xs font-bold text-amber-600">Bantuan Visual Apel 🍎</span>
+            <span class="btn-3d btn-kuning px-3 py-1 rounded-xl text-xs font-bold">Main →</span>
+          </div>
+        </div>
+
+        <!-- Wahana 2: Tangkap Balon Angka -->
+        <div onclick="startMode('balloons')" class="card-game p-5 cursor-pointer hover:-translate-y-2 transition duration-200 border-4 hover:border-sky-400 group flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-14 h-14 rounded-2xl bg-sky-100 border-2 border-sky-300 flex items-center justify-center text-3xl group-hover:scale-110 transition">
+              🎈
+            </div>
+            <div>
+              <span class="text-xs font-bold text-sky-600 uppercase tracking-wider">Wahana 2</span>
+              <h3 class="text-xl font-bold text-slate-800">Pesta Balon Angka</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-500 font-sans">
+              Pecahkan balon terbang dengan angka yang benar! Melatih ketangkasan mata dan kecepatan berpikir.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-xs font-bold text-sky-600">Suara Pop Balon 💥</span>
+            <span class="btn-3d btn-biru px-3 py-1 rounded-xl text-xs font-bold">Main →</span>
+          </div>
+        </div>
+
+        <!-- Wahana 3: Pecahan & Geometri Bangun Datar -->
+        <div onclick="startMode('shapes')" class="card-game p-5 cursor-pointer hover:-translate-y-2 transition duration-200 border-4 hover:border-pink-400 group flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-14 h-14 rounded-2xl bg-pink-100 border-2 border-pink-300 flex items-center justify-center text-3xl group-hover:scale-110 transition">
+              🍕🔷
+            </div>
+            <div>
+              <span class="text-xs font-bold text-pink-600 uppercase tracking-wider">Wahana 3</span>
+              <h3 class="text-xl font-bold text-slate-800">Kue Pecahan & Bentuk</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-500 font-sans">
+              Mengenal pecahan lewat potongan kue pizza dan tebak nama bangun datar yang lucu dan warna-warni!
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-xs font-bold text-pink-600">Visual Pizza & Bentuk</span>
+            <span class="btn-3d btn-pink px-3 py-1 rounded-xl text-xs font-bold">Main →</span>
+          </div>
+        </div>
+
+        <!-- Wahana 4: Soal Cerita Matematika Kontekstual -->
+        <div onclick="startMode('story')" class="card-game p-5 cursor-pointer hover:-translate-y-2 transition duration-200 border-4 hover:border-emerald-400 group flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center text-3xl group-hover:scale-110 transition">
+              🛒📖
+            </div>
+            <div>
+              <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Wahana 4</span>
+              <h3 class="text-xl font-bold text-slate-800">Petualangan Belanja</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-500 font-sans">
+              Soal cerita seru di kantin sekolah, kebun buah, toko buku, dan membaca jam dinding waktu sehari-hari.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-600">Literasi Numerasi SD</span>
+            <span class="btn-3d btn-hijau px-3 py-1 rounded-xl text-xs font-bold">Main →</span>
+          </div>
+        </div>
+
+        <!-- Wahana 5: Duel Kilat 60 Detik -->
+        <div onclick="startMode('speed')" class="card-game p-5 cursor-pointer hover:-translate-y-2 transition duration-200 border-4 hover:border-purple-400 group flex flex-col justify-between sm:col-span-2 lg:col-span-1">
+          <div class="space-y-3">
+            <div class="w-14 h-14 rounded-2xl bg-purple-100 border-2 border-purple-300 flex items-center justify-center text-3xl group-hover:scale-110 transition">
+              ⚡⏱️
+            </div>
+            <div>
+              <span class="text-xs font-bold text-purple-600 uppercase tracking-wider">Wahana 5</span>
+              <h3 class="text-xl font-bold text-slate-800">Tantangan Kilat 60s</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-500 font-sans">
+              Berapa banyak soal yang bisa kamu jawab dengan benar dalam waktu 60 detik? Uji kecepatan berhitungmu!
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-xs font-bold text-purple-600">Uji Kecepatan Berhitung</span>
+            <span class="btn-3d btn-ungu px-3 py-1 rounded-xl text-xs font-bold">Mulai ⚡</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- VIEW 2: WAHANA 1 — TAMAN BERHITUNG CERIA (BASIC MATH) -->
+    <!-- ======================================================== -->
+    <section id="viewBasic" class="hidden space-y-5 animate-pop-in">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <button onclick="goToView('home')" class="btn-3d bg-white hover:bg-slate-100 text-sky-800 border-b-4 border-slate-300 px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow">
+          ← Kembali ke Menu
+        </button>
+        <div class="bg-white/90 px-4 py-1.5 rounded-2xl border-2 border-yellow-300 shadow font-bold text-xs sm:text-sm text-sky-900">
+          Soal ke- <span id="basicQuestionCount" class="text-amber-600">1</span> dari 10
+        </div>
+      </div>
+
+      <!-- Kotak Soal Berhitung Utama -->
+      <div class="card-game p-6 sm:p-10 text-center space-y-6">
+        <!-- Maskot & Instruksi -->
+        <div class="flex items-center justify-center gap-2">
+          <span class="text-3xl animate-bounce-slow">🦉</span>
+          <p id="basicInstruction" class="text-sm sm:text-base font-bold text-sky-900">
+            Ayo hitung hasil penjumlahan berikut ini:
+          </p>
+        </div>
+
+        <!-- Soal Angka Raksasa -->
+        <div class="flex items-center justify-center gap-4 sm:gap-6 text-4xl sm:text-6xl font-extrabold text-sky-950 py-2">
+          <span id="basicNum1" class="bg-amber-100 border-4 border-amber-300 w-16 h-16 sm:w-24 sm:h-24 rounded-3xl flex items-center justify-center shadow-inner">5</span>
+          <span id="basicOperator" class="text-amber-500">+</span>
+          <span id="basicNum2" class="bg-sky-100 border-4 border-sky-300 w-16 h-16 sm:w-24 sm:h-24 rounded-3xl flex items-center justify-center shadow-inner">3</span>
+          <span class="text-slate-400">=</span>
+          <span class="bg-yellow-200 border-4 border-dashed border-amber-400 w-16 h-16 sm:w-24 sm:h-24 rounded-3xl flex items-center justify-center text-amber-700">?</span>
+        </div>
+
+        <!-- Bantuan Visual Gambar (Sangat Berguna untuk Kelas 1 & 2) -->
+        <div id="visualHelpBox" class="bg-amber-50 border-2 border-amber-200 p-3 sm:p-4 rounded-2xl space-y-2">
+          <div class="text-xs font-bold text-amber-800 flex items-center justify-center gap-1">
+            <span>💡</span> Bantuan Gambar Apel (Hitung satu-satu yuk!):
+          </div>
+          <div class="flex items-center justify-center gap-3 sm:gap-6 flex-wrap text-2xl sm:text-3xl">
+            <div id="visualApples1" class="flex gap-1 flex-wrap justify-center">🍎🍎🍎🍎🍎</div>
+            <span class="text-sm font-bold text-amber-600">dan</span>
+            <div id="visualApples2" class="flex gap-1 flex-wrap justify-center">🍎🍎🍎</div>
+          </div>
+        </div>
+
+        <!-- Pilihan Jawaban (4 Tombol Besar Ramah Sentuhan) -->
+        <div id="basicOptionsContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-2">
+          <!-- Injected via JS -->
+        </div>
+
+        <!-- Pesan Jawaban Interaktif -->
+        <div id="basicFeedback" class="hidden p-4 rounded-2xl font-bold text-base transition duration-300">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- VIEW 3: WAHANA 2 — PESTA BALON ANGKA (FLOATING BALLOONS) -->
+    <!-- ======================================================== -->
+    <section id="viewBalloons" class="hidden space-y-5 animate-pop-in">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <button onclick="goToView('home')" class="btn-3d bg-white hover:bg-slate-100 text-sky-800 border-b-4 border-slate-300 px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow">
+          ← Kembali ke Menu
+        </button>
+        <div class="bg-white/90 px-4 py-1.5 rounded-2xl border-2 border-sky-300 shadow font-bold text-xs sm:text-sm text-sky-900">
+          Target Soal: <span id="balloonTargetText" class="text-pink-600 font-extrabold text-base">Cari angka 15!</span>
+        </div>
+      </div>
+
+      <div class="card-game p-6 sm:p-8 text-center space-y-4">
+        <div class="flex items-center justify-center gap-2">
+          <span class="text-3xl animate-bounce-slow">🦊</span>
+          <p class="text-sm sm:text-base font-bold text-slate-700">
+            Pecahkan balon yang memiliki hasil hitung yang tepat!
+          </p>
+        </div>
+
+        <!-- Area Balon Terapung -->
+        <div id="balloonSkyArea" class="min-h-[280px] sm:min-h-[320px] bg-gradient-to-b from-sky-100 to-sky-50 rounded-3xl border-4 border-dashed border-sky-200 p-4 flex items-center justify-around flex-wrap gap-4 relative overflow-hidden">
+          <!-- Balon diisi oleh JS -->
+        </div>
+
+        <div id="balloonFeedback" class="hidden p-3 rounded-2xl font-bold text-sm"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- VIEW 4: WAHANA 3 — KUE PECAHAN & BANGUN DATAR -->
+    <!-- ======================================================== -->
+    <section id="viewShapes" class="hidden space-y-5 animate-pop-in">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <button onclick="goToView('home')" class="btn-3d bg-white hover:bg-slate-100 text-sky-800 border-b-4 border-slate-300 px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow">
+          ← Kembali ke Menu
+        </button>
+        <div class="bg-white/90 px-4 py-1.5 rounded-2xl border-2 border-pink-300 shadow font-bold text-xs sm:text-sm text-pink-700">
+          Teka-Teki Bentuk & Pecahan
+        </div>
+      </div>
+
+      <div class="card-game p-6 sm:p-10 text-center space-y-6">
+        <div class="flex items-center justify-center gap-2">
+          <span class="text-3xl animate-wiggle">🍕</span>
+          <p id="shapeQuestionPrompt" class="text-base sm:text-lg font-bold text-slate-800">
+            Perhatikan gambar pizza berikut, berapa bagian pizza yang tersisa?
+          </p>
+        </div>
+
+        <!-- Gambar Visual Bentuk / Pecahan Menggunakan SVG Murni (Tanpa Gambar Luar) -->
+        <div class="flex justify-center items-center py-2">
+          <div id="shapeVisualContainer" class="w-48 h-48 sm:w-56 sm:h-56 bg-slate-50 border-4 border-yellow-200 rounded-3xl flex items-center justify-center shadow-inner">
+            <!-- SVG Diisi oleh JS -->
+          </div>
+        </div>
+
+        <!-- Pilihan Jawaban Bentuk -->
+        <div id="shapeOptionsContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-2">
+          <!-- Buttons injected by JS -->
+        </div>
+
+        <div id="shapeFeedback" class="hidden p-4 rounded-2xl font-bold text-base"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- VIEW 5: WAHANA 4 — PETUALANGAN SOAL CERITA -->
+    <!-- ======================================================== -->
+    <section id="viewStory" class="hidden space-y-5 animate-pop-in">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <button onclick="goToView('home')" class="btn-3d bg-white hover:bg-slate-100 text-sky-800 border-b-4 border-slate-300 px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow">
+          ← Kembali ke Menu
+        </button>
+        <div class="bg-white/90 px-4 py-1.5 rounded-2xl border-2 border-emerald-300 shadow font-bold text-xs sm:text-sm text-emerald-800">
+          Soal Cerita Sehari-hari
+        </div>
+      </div>
+
+      <div class="card-game p-6 sm:p-8 space-y-6">
+        <div class="flex items-start gap-4">
+          <div id="storyAvatar" class="w-16 h-16 rounded-2xl bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center text-3xl shrink-0 shadow">
+            🐰
+          </div>
+          <div class="space-y-1">
+            <h3 id="storyTitle" class="text-lg sm:text-xl font-bold text-emerald-900">Mimi Membeli Es Krim di Kantin</h3>
+            <p id="storyBody" class="text-sm sm:text-base text-slate-700 font-sans leading-relaxed bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200">
+              Mimi membawa uang jajan sebesar <strong>Rp 10.000</strong>. Di kantin sekolah, Mimi membeli 1 es krim cokelat seharga <strong>Rp 4.000</strong> dan 1 bungkus biskuit seharga <strong>Rp 2.000</strong>. Berapakah sisa uang kembalian Mimi?
+            </p>
+          </div>
+        </div>
+
+        <div id="storyOptionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <!-- Buttons injected by JS -->
+        </div>
+
+        <div id="storyFeedback" class="hidden p-4 rounded-2xl font-bold text-base text-center"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- VIEW 6: WAHANA 5 — DUEL KILAT 60 DETIK -->
+    <!-- ======================================================== -->
+    <section id="viewSpeed" class="hidden space-y-5 animate-pop-in">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <button onclick="endSpeedChallenge()" class="btn-3d bg-white hover:bg-slate-100 text-sky-800 border-b-4 border-slate-300 px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow">
+          ← Selesai / Keluar
+        </button>
+        <!-- Waktu Mundur -->
+        <div class="bg-red-100 border-2 border-red-300 px-4 py-1.5 rounded-2xl shadow font-bold text-base sm:text-lg text-red-600 flex items-center gap-2">
+          <span>⏱️</span> Sisa Waktu: <span id="speedTimer">60</span> detik
+        </div>
+      </div>
+
+      <div class="card-game p-6 sm:p-10 text-center space-y-6">
+        <div class="flex items-center justify-center gap-2">
+          <span class="text-3xl animate-bounce-slow">⚡</span>
+          <p class="text-sm sm:text-base font-bold text-purple-900">
+            Jawab secepat mungkin sebelum waktu habis!
+          </p>
+        </div>
+
+        <!-- Soal Cepat -->
+        <div class="text-4xl sm:text-6xl font-extrabold text-slate-800 py-3">
+          <span id="speedQuestionText">7 + 8 = ?</span>
+        </div>
+
+        <div class="flex justify-center gap-4 text-xs sm:text-sm font-bold text-slate-600">
+          <span>Benar: <strong id="speedCorrectCount" class="text-green-600">0</strong></span>
+          <span>•</span>
+          <span>Salah: <strong id="speedWrongCount" class="text-red-500">0</strong></span>
+        </div>
+
+        <div id="speedOptionsContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          <!-- Buttons injected by JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: PIAGAM BINTANG MATEMATIKA RESMI -->
+  <!-- ======================================================== -->
+  <div id="modalCert" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white w-full max-w-2xl rounded-3xl p-5 sm:p-6 border-4 border-yellow-300 shadow-2xl space-y-4 max-h-[95vh] overflow-y-auto animate-pop-in">
+      <div class="flex items-center justify-between border-b pb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">📜</span>
+          <h3 class="text-lg font-bold text-sky-900">Piagam Bintang Matematika SD</h3>
+        </div>
+        <button onclick="closeModal('modalCert')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold flex items-center justify-center">
+          ✕
+        </button>
+      </div>
+
+      <!-- Input Nama Siswa -->
+      <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+        <label for="inputCertStudentName" class="text-xs font-bold text-slate-700 shrink-0">Nama Lengkap Juara:</label>
+        <input type="text" id="inputCertStudentName" placeholder="Tuliskan namamu di sini..." class="flex-1 px-3 py-2 rounded-xl bg-slate-100 border-2 border-slate-300 text-slate-800 text-sm font-bold focus:outline-none focus:border-amber-400" oninput="drawCertificate()">
+        <button onclick="drawCertificate()" class="btn-3d btn-kuning px-4 py-2 rounded-xl text-xs font-bold shrink-0">
+          Perbarui 🖋️
+        </button>
+      </div>
+
+      <!-- Preview Canvas Sertifikat -->
+      <div class="w-full flex justify-center bg-sky-900/10 p-2 rounded-2xl border-2 border-yellow-200 overflow-hidden">
+        <canvas id="certCanvas" width="800" height="560" class="max-w-full h-auto rounded-xl shadow-md border-2 border-amber-300"></canvas>
+      </div>
+
+      <!-- Aksi Unduh & Cetak -->
+      <div class="flex items-center justify-between flex-wrap gap-2 pt-2">
+        <span class="text-[11px] text-slate-500 font-sans font-medium">Bintang tersimpan otomatis dari setiap permainanmu!</span>
+        <div class="flex gap-2">
+          <button onclick="downloadCertificate()" class="btn-3d btn-hijau px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1 shadow">
+            <span>💾 Unduh Gambar (PNG)</span>
+          </button>
+          <button onclick="window.print()" class="btn-3d btn-biru px-3.5 py-2 rounded-xl text-xs font-bold shadow">
+            🖨️ Cetak / PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER RAMAH ANAK -->
+  <footer class="mt-auto bg-white/90 border-t-2 border-yellow-300 py-3 px-4 text-center text-xs text-sky-800 font-bold">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1">
+      <div>🦁 Rimba Angka: Game Matematika Ceria Anak SD &copy; 2026</div>
+      <div class="text-slate-500 font-sans font-medium">Fase A (Kelas 1-2) • Fase B (Kelas 3-4) • Fase C (Kelas 5-6)</div>
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- JAVASCRIPT GAME ENGINE & AUDIO SYNTHESIZER -->
+  <!-- ======================================================== -->
+  <script>
+    /* ==========================================
+       1. GAME STATE & LOCAL STORAGE
+       ========================================== */
+    const SAVE_KEY = 'rimba_angka_save_v1';
+    let gameState = {
+      playerName: 'Bintang Cilik',
+      stars: 10,
+      gradeLevel: 1, // 1: Kelas 1-2, 2: Kelas 3-4, 3: Kelas 5-6
+      soundBgm: false,
+      soundSfx: true,
+      currentBasicQuestion: 1,
+    };
+
+    function loadGame() {
+      try {
+        const raw = localStorage.getItem(SAVE_KEY);
+        if (raw) {
+          gameState = { ...gameState, ...JSON.parse(raw) };
+        }
+      } catch (e) {
+        console.warn('Gagal memuat save:', e);
+      }
+      updateHUD();
+      updateGradeButtons();
+    }
+
+    function saveGame() {
+      try {
+        localStorage.setItem(SAVE_KEY, JSON.stringify(gameState));
+      } catch (e) {
+        console.warn('Gagal menyimpan:', e);
+      }
+      updateHUD();
+    }
+
+    function addStars(num) {
+      gameState.stars += num;
+      saveGame();
+      triggerConfetti();
+    }
+
+    function updateHUD() {
+      const starEl = document.getElementById('playerStars');
+      const titleEl = document.getElementById('playerTitle');
+      const avatarEl = document.getElementById('playerAvatar');
+      if (starEl) starEl.textContent = gameState.stars;
+      if (titleEl) {
+        if (gameState.stars >= 100) {
+          titleEl.textContent = 'Mahaguru Angka 👑';
+          avatarEl.textContent = '👑';
+        } else if (gameState.stars >= 50) {
+          titleEl.textContent = 'Pakar Berhitung 🦉';
+          avatarEl.textContent = '🦉';
+        } else if (gameState.stars >= 25) {
+          titleEl.textContent = 'Rubah Cepat 🦊';
+          avatarEl.textContent = '🦊';
+        } else {
+          titleEl.textContent = 'Juara Cilik 🦁';
+          avatarEl.textContent = '🦁';
+        }
+      }
+    }
+
+    function setGrade(level) {
+      gameState.gradeLevel = level;
+      saveGame();
+      updateGradeButtons();
+      playSfxPop();
+    }
+
+    function updateGradeButtons() {
+      const b1 = document.getElementById('btnGrade1');
+      const b2 = document.getElementById('btnGrade2');
+      const b3 = document.getElementById('btnGrade3');
+      if (!b1 || !b2 || !b3) return;
+
+      b1.className = `btn-3d btn-hijau px-3.5 sm:px-5 py-2 rounded-2xl text-xs sm:text-sm font-bold shadow-md ${gameState.gradeLevel === 1 ? 'ring-4 ring-yellow-300 opacity-100 scale-105' : 'opacity-70'}`;
+      b2.className = `btn-3d btn-biru px-3.5 sm:px-5 py-2 rounded-2xl text-xs sm:text-sm font-bold shadow-md ${gameState.gradeLevel === 2 ? 'ring-4 ring-yellow-300 opacity-100 scale-105' : 'opacity-70'}`;
+      b3.className = `btn-3d btn-ungu px-3.5 sm:px-5 py-2 rounded-2xl text-xs sm:text-sm font-bold shadow-md ${gameState.gradeLevel === 3 ? 'ring-4 ring-yellow-300 opacity-100 scale-105' : 'opacity-70'}`;
+    }
+
+    /* ==========================================
+       2. WEB AUDIO API SYNTHESIZER (CERIA & RAMAH ANAK)
+       ========================================== */
+    let audioCtx = null;
+    let bgmInterval = null;
+    let isBgmOn = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function toggleBgm() {
+      initAudio();
+      isBgmOn = !isBgmOn;
+      gameState.soundBgm = isBgmOn;
+      const icon = document.getElementById('bgmIcon');
+      if (isBgmOn) {
+        if (icon) icon.textContent = '🎶';
+        startCheerfulBgm();
+      } else {
+        if (icon) icon.textContent = '🎵';
+        stopCheerfulBgm();
+      }
+      saveGame();
+    }
+
+    function toggleSfx() {
+      gameState.soundSfx = !gameState.soundSfx;
+      const icon = document.getElementById('sfxIcon');
+      if (icon) icon.textContent = gameState.soundSfx ? '🔊' : '🔇';
+      if (gameState.soundSfx) playSfxPop();
+      saveGame();
+    }
+
+    // Melodi ceria nursery tune (C major riang)
+    const cheerfulNotes = [261.63, 329.63, 392.00, 523.25, 440.00, 392.00, 329.63, 293.66];
+    let noteIdx = 0;
+
+    function startCheerfulBgm() {
+      stopCheerfulBgm();
+      if (!audioCtx) initAudio();
+      bgmInterval = setInterval(() => {
+        if (!isBgmOn || !audioCtx) return;
+        const now = audioCtx.currentTime;
+        const freq = cheerfulNotes[noteIdx % cheerfulNotes.length];
+        noteIdx++;
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now);
+
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.46);
+      }, 420);
+    }
+
+    function stopCheerfulBgm() {
+      if (bgmInterval) clearInterval(bgmInterval);
+    }
+
+    // SFX Pop Balon
+    function playSfxPop() {
+      if (!gameState.soundSfx) return;
+      initAudio();
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(450, now);
+      osc.frequency.exponentialRampToValueAtTime(80, now + 0.08);
+      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.09);
+    }
+
+    // SFX Benar (Chime Ceria)
+    function playSfxCorrect() {
+      if (!gameState.soundSfx) return;
+      initAudio();
+      const now = audioCtx.currentTime;
+      [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+        gain.gain.setValueAtTime(0.2, now + idx * 0.07);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.3);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now + idx * 0.07);
+        osc.stop(now + idx * 0.07 + 0.31);
+      });
+    }
+
+    // SFX Coba Lagi (Boing Lembut)
+    function playSfxWrong() {
+      if (!gameState.soundSfx) return;
+      initAudio();
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(260, now);
+      osc.frequency.linearRampToValueAtTime(160, now + 0.2);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.21);
+    }
+
+    /* ==========================================
+       3. NAVIGASI TAMPILAN
+       ========================================== */
+    function goToView(viewId) {
+      playSfxPop();
+      const views = ['viewHome', 'viewBasic', 'viewBalloons', 'viewShapes', 'viewStory', 'viewSpeed'];
+      views.forEach(v => {
+        const el = document.getElementById(v);
+        if (el) el.classList.add('hidden');
+      });
+
+      let target = 'viewHome';
+      if (viewId === 'basic') target = 'viewBasic';
+      if (viewId === 'balloons') target = 'viewBalloons';
+      if (viewId === 'shapes') target = 'viewShapes';
+      if (viewId === 'story') target = 'viewStory';
+      if (viewId === 'speed') target = 'viewSpeed';
+
+      const targetEl = document.getElementById(target);
+      if (targetEl) targetEl.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openModal(id) {
+      playSfxPop();
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+      if (id === 'modalCert') drawCertificate();
+    }
+
+    function closeModal(id) {
+      playSfxPop();
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    }
+
+    function startMode(mode) {
+      goToView(mode);
+      if (mode === 'basic') generateBasicQuestion();
+      if (mode === 'balloons') generateBalloonRound();
+      if (mode === 'shapes') generateShapeQuestion();
+      if (mode === 'story') generateStoryQuestion();
+      if (mode === 'speed') startSpeedChallenge();
+    }
+
+    /* ==========================================
+       4. WAHANA 1: TAMAN BERHITUNG CERIA (BASIC)
+       ========================================== */
+    let currentBasicData = null;
+
+    function generateBasicQuestion() {
+      const grade = gameState.gradeLevel;
+      let num1, num2, operator, correctAnswer;
+
+      if (grade === 1) {
+        // Kelas 1-2: Tambah & Kurang 1 - 20
+        const isPlus = Math.random() > 0.4;
+        if (isPlus) {
+          num1 = Math.floor(Math.random() * 9) + 1;
+          num2 = Math.floor(Math.random() * 9) + 1;
+          operator = '+';
+          correctAnswer = num1 + num2;
+        } else {
+          num1 = Math.floor(Math.random() * 10) + 5;
+          num2 = Math.floor(Math.random() * (num1 - 1)) + 1;
+          operator = '-';
+          correctAnswer = num1 - num2;
+        }
+      } else if (grade === 2) {
+        // Kelas 3-4: Tambah/Kurang puluhan & Perkalian 1-10
+        const type = Math.floor(Math.random() * 3);
+        if (type === 0) {
+          num1 = Math.floor(Math.random() * 50) + 10;
+          num2 = Math.floor(Math.random() * 40) + 10;
+          operator = '+';
+          correctAnswer = num1 + num2;
+        } else if (type === 1) {
+          num1 = Math.floor(Math.random() * 70) + 20;
+          num2 = Math.floor(Math.random() * (num1 - 5)) + 5;
+          operator = '-';
+          correctAnswer = num1 - num2;
+        } else {
+          num1 = Math.floor(Math.random() * 9) + 2;
+          num2 = Math.floor(Math.random() * 9) + 2;
+          operator = '×';
+          correctAnswer = num1 * num2;
+        }
+      } else {
+        // Kelas 5-6: Perkalian & Pembagian ratusan
+        const type = Math.floor(Math.random() * 3);
+        if (type === 0) {
+          num1 = Math.floor(Math.random() * 15) + 6;
+          num2 = Math.floor(Math.random() * 12) + 4;
+          operator = '×';
+          correctAnswer = num1 * num2;
+        } else if (type === 1) {
+          num2 = Math.floor(Math.random() * 9) + 3;
+          correctAnswer = Math.floor(Math.random() * 12) + 4;
+          num1 = num2 * correctAnswer;
+          operator = '÷';
+        } else {
+          num1 = Math.floor(Math.random() * 150) + 50;
+          num2 = Math.floor(Math.random() * 90) + 20;
+          operator = '+';
+          correctAnswer = num1 + num2;
+        }
+      }
+
+      currentBasicData = { num1, num2, operator, correctAnswer };
+
+      document.getElementById('basicNum1').textContent = num1;
+      document.getElementById('basicOperator').textContent = operator;
+      document.getElementById('basicNum2').textContent = num2;
+
+      // Visual Apples for Grade 1
+      const visualBox = document.getElementById('visualHelpBox');
+      if (grade === 1 && (operator === '+' || operator === '-')) {
+        visualBox.classList.remove('hidden');
+        const apple1 = '🍎'.repeat(Math.min(num1, 15));
+        const apple2 = '🍎'.repeat(Math.min(num2, 15));
+        document.getElementById('visualApples1').textContent = apple1;
+        document.getElementById('visualApples2').textContent = apple2;
+      } else {
+        visualBox.classList.add('hidden');
+      }
+
+      // Generate 4 Options (1 correct, 3 wrong)
+      const options = [correctAnswer];
+      while (options.length < 4) {
+        const offset = (Math.floor(Math.random() * 6) + 1) * (Math.random() > 0.5 ? 1 : -1);
+        const wrong = Math.max(1, correctAnswer + offset);
+        if (!options.includes(wrong)) options.push(wrong);
+      }
+      options.sort(() => Math.random() - 0.5);
+
+      const optContainer = document.getElementById('basicOptionsContainer');
+      optContainer.innerHTML = '';
+      options.forEach(val => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-3d btn-biru py-3 sm:py-4 rounded-2xl text-xl sm:text-2xl font-bold shadow-md';
+        btn.textContent = val;
+        btn.onclick = () => checkBasicAnswer(val, btn);
+        optContainer.appendChild(btn);
+      });
+
+      const fb = document.getElementById('basicFeedback');
+      fb.classList.add('hidden');
+    }
+
+    function checkBasicAnswer(val, btn) {
+      const fb = document.getElementById('basicFeedback');
+      const allBtns = document.querySelectorAll('#basicOptionsContainer button');
+      allBtns.forEach(b => b.disabled = true);
+
+      if (val === currentBasicData.correctAnswer) {
+        playSfxCorrect();
+        addStars(2);
+        btn.className = 'btn-3d btn-hijau py-3 sm:py-4 rounded-2xl text-xl sm:text-2xl font-bold shadow-md';
+        fb.className = 'p-4 rounded-2xl font-bold text-base bg-green-100 text-green-800 border-2 border-green-300';
+        fb.innerHTML = `🎉 Hebat Sekali! ${currentBasicData.num1} ${currentBasicData.operator} ${currentBasicData.num2} = ${currentBasicData.correctAnswer}! (+2 ⭐)`;
+      } else {
+        playSfxWrong();
+        btn.className = 'btn-3d btn-oranye py-3 sm:py-4 rounded-2xl text-xl sm:text-2xl font-bold shadow-md';
+        fb.className = 'p-4 rounded-2xl font-bold text-base bg-amber-100 text-amber-800 border-2 border-amber-300';
+        fb.innerHTML = `💡 Ayo Coba Lagi! Jawaban yang tepat adalah ${currentBasicData.correctAnswer}. Kamu pasti bisa!`;
+      }
+      fb.classList.remove('hidden');
+
+      setTimeout(() => {
+        generateBasicQuestion();
+      }, 1600);
+    }
+
+    /* ==========================================
+       5. WAHANA 2: PESTA BALON ANGKA
+       ========================================== */
+    let currentBalloonTarget = 0;
+
+    function generateBalloonRound() {
+      const area = document.getElementById('balloonSkyArea');
+      area.innerHTML = '';
+      const fb = document.getElementById('balloonFeedback');
+      fb.classList.add('hidden');
+
+      const grade = gameState.gradeLevel;
+      let target, questionLabel;
+
+      if (grade === 1) {
+        const a = Math.floor(Math.random() * 8) + 2;
+        const b = Math.floor(Math.random() * 8) + 1;
+        target = a + b;
+        questionLabel = `Pecahkan Balon Hasil dari ${a} + ${b} !`;
+      } else if (grade === 2) {
+        const a = Math.floor(Math.random() * 7) + 3;
+        const b = Math.floor(Math.random() * 7) + 2;
+        target = a * b;
+        questionLabel = `Pecahkan Balon Hasil dari ${a} × ${b} !`;
+      } else {
+        const a = Math.floor(Math.random() * 9) + 4;
+        const b = Math.floor(Math.random() * 8) + 4;
+        target = a * b;
+        questionLabel = `Pecahkan Balon Hasil dari ${a} × ${b} !`;
+      }
+
+      currentBalloonTarget = target;
+      document.getElementById('balloonTargetText').textContent = questionLabel;
+
+      // 5 Balon Berwarna
+      const colors = [
+        { bg: '#ef4444', text: '#ffffff' }, // merah
+        { bg: '#3b82f6', text: '#ffffff' }, // biru
+        { bg: '#10b981', text: '#ffffff' }, // hijau
+        { bg: '#f59e0b', text: '#ffffff' }, // kuning
+        { bg: '#8b5cf6', text: '#ffffff' }, // ungu
+      ];
+
+      const numbers = [target];
+      while (numbers.length < 5) {
+        const offset = (Math.floor(Math.random() * 8) + 1) * (Math.random() > 0.5 ? 1 : -1);
+        const w = Math.max(1, target + offset);
+        if (!numbers.includes(w)) numbers.push(w);
+      }
+      numbers.sort(() => Math.random() - 0.5);
+
+      numbers.forEach((num, idx) => {
+        const c = colors[idx % colors.length];
+        const balloon = document.createElement('div');
+        balloon.className = 'balloon-box flex flex-col items-center select-none animate-float';
+        balloon.style.animationDelay = `${idx * 0.4}s`;
+        balloon.innerHTML = `
+          <div style="background-color: ${c.bg}; color: ${c.text};" class="w-20 h-24 sm:w-24 sm:h-28 rounded-full shadow-lg flex items-center justify-center text-2xl sm:text-3xl font-extrabold border-4 border-white/40">
+            ${num}
+          </div>
+          <div class="w-1 h-8 bg-slate-300"></div>
+          <div class="text-xs">🎈</div>
+        `;
+        balloon.onclick = () => popBalloon(num, balloon);
+        area.appendChild(balloon);
+      });
+    }
+
+    function popBalloon(num, el) {
+      const fb = document.getElementById('balloonFeedback');
+      if (num === currentBalloonTarget) {
+        playSfxCorrect();
+        playSfxPop();
+        addStars(3);
+        el.style.transform = 'scale(0)';
+        el.style.opacity = '0';
+        fb.className = 'p-3 rounded-2xl font-bold text-sm bg-green-100 text-green-800 border-2 border-green-300';
+        fb.textContent = `💥 POP! Tepat Sekali! Balon angka ${num} meletus sempurna! (+3 ⭐)`;
+        fb.classList.remove('hidden');
+        setTimeout(() => {
+          generateBalloonRound();
+        }, 1200);
+      } else {
+        playSfxWrong();
+        fb.className = 'p-3 rounded-2xl font-bold text-sm bg-red-100 text-red-800 border-2 border-red-300';
+        fb.textContent = `Bukan ${num}, coba cari balon angka lainnya yuk!`;
+        fb.classList.remove('hidden');
+      }
+    }
+
+    /* ==========================================
+       6. WAHANA 3: PECAHAN & BANGUN DATAR (SHAPES)
+       ========================================== */
+    const shapeQuestions = [
+      {
+        prompt: 'Perhatikan kue pizza ini, pizza terbagi menjadi 4 potong sama besar. 1 potong diambil, berapa bagian yang tersisa?',
+        svg: `<svg viewBox="0 0 100 100" class="w-36 h-36">
+          <circle cx="50" cy="50" r="42" fill="#fb923c" stroke="#c2410c" stroke-width="4"/>
+          <!-- 3/4 slice pizza -->
+          <path d="M50 50 L50 8 A42 42 0 1 1 8 50 Z" fill="#facc15" stroke="#ca8a04" stroke-width="2"/>
+          <circle cx="65" cy="35" r="4" fill="#dc2626"/>
+          <circle cx="68" cy="65" r="4" fill="#dc2626"/>
+          <circle cx="35" cy="68" r="4" fill="#dc2626"/>
+        </svg>`,
+        options: ['1/4 bagian', '2/4 bagian', '3/4 bagian', '4/4 bagian'],
+        correct: '3/4 bagian',
+        explain: 'Pizza utuh memiliki 4 potong. Jika tersisa 3 potong, pecahannya adalah 3/4 bagian!'
+      },
+      {
+        prompt: 'Berapakah nilai pecahan lingkaran yang berwarna hijau berikut ini?',
+        svg: `<svg viewBox="0 0 100 100" class="w-36 h-36">
+          <circle cx="50" cy="50" r="42" fill="#e2e8f0" stroke="#64748b" stroke-width="4"/>
+          <path d="M50 50 L50 8 A42 42 0 0 1 50 92 Z" fill="#22c55e" stroke="#16a34a" stroke-width="2"/>
+        </svg>`,
+        options: ['1/2 bagian', '1/3 bagian', '1/4 bagian', '2/3 bagian'],
+        correct: '1/2 bagian',
+        explain: 'Lingkaran terbagi menjadi 2 bagian sama besar dan separuhnya berwarna hijau (1/2).'
+      },
+      {
+        prompt: 'Bangun datar yang memiliki 3 sisi dan 3 sudut sama besar disebut...',
+        svg: `<svg viewBox="0 0 100 100" class="w-36 h-36">
+          <polygon points="50,12 12,88 88,88" fill="#38bdf8" stroke="#0284c7" stroke-width="4"/>
+        </svg>`,
+        options: ['Persegi', 'Segitiga', 'Trapesium', 'Lingkaran'],
+        correct: 'Segitiga',
+        explain: 'Segitiga adalah bangun datar dengan 3 buah sisi dan 3 titik sudut.'
+      },
+      {
+        prompt: 'Bangun datar yang memiliki 4 sisi sama panjang dan 4 sudut siku-siku adalah...',
+        svg: `<svg viewBox="0 0 100 100" class="w-36 h-36">
+          <rect x="18" y="18" width="64" height="64" rx="4" fill="#a855f7" stroke="#7e22ce" stroke-width="4"/>
+        </svg>`,
+        options: ['Persegi Panjang', 'Persegi (Bujur Sangkar)', 'Belah Ketupat', 'Segilima'],
+        correct: 'Persegi (Bujur Sangkar)',
+        explain: 'Persegi memiliki 4 sisi yang sama panjang dan semua sudutnya bernilai 90 derajat.'
+      }
+    ];
+
+    let currentShapeIdx = 0;
+
+    function generateShapeQuestion() {
+      const q = shapeQuestions[currentShapeIdx % shapeQuestions.length];
+      document.getElementById('shapeQuestionPrompt').textContent = q.prompt;
+      document.getElementById('shapeVisualContainer').innerHTML = q.svg;
+
+      const optContainer = document.getElementById('shapeOptionsContainer');
+      optContainer.innerHTML = '';
+      const fb = document.getElementById('shapeFeedback');
+      fb.classList.add('hidden');
+
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-3d btn-pink py-3 rounded-2xl text-base sm:text-lg font-bold shadow-md';
+        btn.textContent = opt;
+        btn.onclick = () => checkShapeAnswer(opt, q, btn);
+        optContainer.appendChild(btn);
+      });
+    }
+
+    function checkShapeAnswer(chosen, qData, btn) {
+      const fb = document.getElementById('shapeFeedback');
+      const allBtns = document.querySelectorAll('#shapeOptionsContainer button');
+      allBtns.forEach(b => b.disabled = true);
+
+      if (chosen === qData.correct) {
+        playSfxCorrect();
+        addStars(3);
+        btn.className = 'btn-3d btn-hijau py-3 rounded-2xl text-base sm:text-lg font-bold shadow-md';
+        fb.className = 'p-4 rounded-2xl font-bold text-base bg-green-100 text-green-800 border-2 border-green-300';
+        fb.innerHTML = `🌟 Benar Sekali! ${qData.explain} (+3 ⭐)`;
+      } else {
+        playSfxWrong();
+        btn.className = 'btn-3d btn-oranye py-3 rounded-2xl text-base sm:text-lg font-bold shadow-md';
+        fb.className = 'p-4 rounded-2xl font-bold text-base bg-pink-100 text-pink-800 border-2 border-pink-300';
+        fb.innerHTML = `💡 Jawaban yang tepat: <strong>${qData.correct}</strong>. ${qData.explain}`;
+      }
+      fb.classList.remove('hidden');
+
+      setTimeout(() => {
+        currentShapeIdx++;
+        generateShapeQuestion();
+      }, 2000);
+    }
+
+    /* ==========================================
+       7. WAHANA 4: SOAL CERITA SEHARI-HARI
+       ========================================== */
+    const storyQuestions = [
+      {
+        title: 'Mimi Membeli Es Krim di Kantin',
+        avatar: '🐰',
+        body: 'Mimi membawa uang jajan sebesar <strong>Rp 10.000</strong>. Di kantin sekolah, Mimi membeli 1 es krim seharga <strong>Rp 4.000</strong> dan 1 kotak susu seharga <strong>Rp 3.000</strong>. Berapakah sisa uang kembalian Mimi?',
+        options: ['Rp 2.000', 'Rp 3.000', 'Rp 4.000', 'Rp 5.000'],
+        correct: 'Rp 3.000',
+        explain: 'Total belanja = 4.000 + 3.000 = Rp 7.000. Sisa uang = 10.000 - 7.000 = Rp 3.000.'
+      },
+      {
+        title: 'Leo Memetik Buah Mangga Manis',
+        avatar: '🦁',
+        body: 'Di kebun paman, Leo memetik <strong>24 buah mangga</strong>. Leo ingin membagikan mangga tersebut sama rata kepada <strong>4 orang sahabatnya</strong>. Berapa buah mangga yang didapat oleh setiap sahabat Leo?',
+        options: ['4 buah', '5 buah', '6 buah', '8 buah'],
+        correct: '6 buah',
+        explain: '24 buah mangga dibagi kepada 4 sahabat = 24 ÷ 4 = 6 buah mangga per orang.'
+      },
+      {
+        title: 'Kiki Menghitung Pensil Warna',
+        avatar: '🦉',
+        body: 'Kiki memiliki <strong>3 kotak pensil warna</strong>. Di dalam setiap kotak terdapat <strong>12 batang pensil warna</strong>. Berapa jumlah seluruh pensil warna milik Kiki?',
+        options: ['24 batang', '30 batang', '36 batang', '48 batang'],
+        correct: '36 batang',
+        explain: '3 kotak dikali 12 batang per kotak = 3 × 12 = 36 batang pensil warna.'
+      }
+    ];
+
+    let currentStoryIdx = 0;
+
+    function generateStoryQuestion() {
+      const q = storyQuestions[currentStoryIdx % storyQuestions.length];
+      document.getElementById('storyAvatar').textContent = q.avatar;
+      document.getElementById('storyTitle').textContent = q.title;
+      document.getElementById('storyBody').innerHTML = q.body;
+
+      const optContainer = document.getElementById('storyOptionsContainer');
+      optContainer.innerHTML = '';
+      const fb = document.getElementById('storyFeedback');
+      fb.classList.add('hidden');
+
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-3d btn-hijau p-4 rounded-2xl text-base sm:text-lg font-bold shadow-md text-left flex justify-between items-center';
+        btn.innerHTML = `<span>${opt}</span> <span>➜</span>`;
+        btn.onclick = () => checkStoryAnswer(opt, q, btn);
+        optContainer.appendChild(btn);
+      });
+    }
+
+    function checkStoryAnswer(chosen, qData, btn) {
+      const fb = document.getElementById('storyFeedback');
+      const allBtns = document.querySelectorAll('#storyOptionsContainer button');
+      allBtns.forEach(b => b.disabled = true);
+
+      if (chosen === qData.correct) {
+        playSfxCorrect();
+        addStars(4);
+        fb.className = 'p-4 rounded-2xl font-bold text-base bg-green-100 text-green-800 border-2 border-green-300';
+        fb.innerHTML = `🎉 Jawaban Sangat Pintar! ${qData.explain} (+4 ⭐)`;
+      } else {
+        playSfxWrong();
+        fb.className = 'p-4 rounded-2xl font-bold text-base bg-amber-100 text-amber-800 border-2 border-amber-300';
+        fb.innerHTML = `💡 Jawaban yang benar adalah <strong>${qData.correct}</strong>. ${qData.explain}`;
+      }
+      fb.classList.remove('hidden');
+
+      setTimeout(() => {
+        currentStoryIdx++;
+        generateStoryQuestion();
+      }, 2200);
+    }
+
+    /* ==========================================
+       8. WAHANA 5: DUEL KILAT 60 DETIK
+       ========================================== */
+    let speedTimer = null;
+    let speedTimeLeft = 60;
+    let speedCorrect = 0;
+    let speedWrong = 0;
+    let speedCurrentAnswer = 0;
+
+    function startSpeedChallenge() {
+      speedTimeLeft = 60;
+      speedCorrect = 0;
+      speedWrong = 0;
+      document.getElementById('speedTimer').textContent = speedTimeLeft;
+      document.getElementById('speedCorrectCount').textContent = speedCorrect;
+      document.getElementById('speedWrongCount').textContent = speedWrong;
+
+      if (speedTimer) clearInterval(speedTimer);
+      speedTimer = setInterval(() => {
+        speedTimeLeft--;
+        document.getElementById('speedTimer').textContent = speedTimeLeft;
+        if (speedTimeLeft <= 0) {
+          endSpeedChallenge();
+        }
+      }, 1000);
+
+      nextSpeedQuestion();
+    }
+
+    function nextSpeedQuestion() {
+      const a = Math.floor(Math.random() * 9) + 2;
+      const b = Math.floor(Math.random() * 9) + 2;
+      const isPlus = Math.random() > 0.4;
+      let qText, ans;
+
+      if (isPlus) {
+        qText = `${a} + ${b} = ?`;
+        ans = a + b;
+      } else {
+        qText = `${a} × ${b} = ?`;
+        ans = a * b;
+      }
+      speedCurrentAnswer = ans;
+      document.getElementById('speedQuestionText').textContent = qText;
+
+      const options = [ans];
+      while (options.length < 4) {
+        const offset = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1);
+        const w = Math.max(1, ans + offset);
+        if (!options.includes(w)) options.push(w);
+      }
+      options.sort(() => Math.random() - 0.5);
+
+      const optContainer = document.getElementById('speedOptionsContainer');
+      optContainer.innerHTML = '';
+      options.forEach(val => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-3d btn-ungu py-4 rounded-2xl text-2xl font-bold shadow-md';
+        btn.textContent = val;
+        btn.onclick = () => submitSpeedAnswer(val);
+        optContainer.appendChild(btn);
+      });
+    }
+
+    function submitSpeedAnswer(val) {
+      if (val === speedCurrentAnswer) {
+        playSfxPop();
+        speedCorrect++;
+        addStars(1);
+        document.getElementById('speedCorrectCount').textContent = speedCorrect;
+      } else {
+        playSfxWrong();
+        speedWrong++;
+        document.getElementById('speedWrongCount').textContent = speedWrong;
+      }
+      nextSpeedQuestion();
+    }
+
+    function endSpeedChallenge() {
+      if (speedTimer) clearInterval(speedTimer);
+      playSfxCorrect();
+      alert(`⏱️ Waktu Habis!\nSkor Akhirmu:\n✅ Benar: ${speedCorrect}\n❌ Salah: ${speedWrong}\nKamu mendapatkan ${speedCorrect} Bintang Emas! ⭐`);
+      goToView('home');
+    }
+
+    /* ==========================================
+       9. PIAGAM BINTANG RESMI (CANVAS 2D)
+       ========================================== */
+    function drawCertificate() {
+      const canvas = document.getElementById('certCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      const input = document.getElementById('inputCertStudentName');
+      const name = (input && input.value.trim()) ? input.value.trim() : gameState.playerName;
+
+      // Background Kuning Emas Cerah
+      ctx.fillStyle = '#fffdf0';
+      ctx.fillRect(0, 0, w, h);
+
+      // Bingkai Biru & Kuning Gembira
+      ctx.strokeStyle = '#0284c7';
+      ctx.lineWidth = 14;
+      ctx.strokeRect(15, 15, w - 30, h - 30);
+
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(26, 26, w - 52, h - 52);
+
+      // Hiasan Emoji Bintang di Sudut
+      ctx.font = '28px sans-serif';
+      ctx.fillText('⭐', 40, 65);
+      ctx.fillText('🦁', w - 75, 65);
+      ctx.fillText('🏆', 40, h - 45);
+      ctx.fillText('⭐', w - 75, h - 45);
+
+      // Header Judul Piagam
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#b45309';
+      ctx.font = 'bold 20px "Fredoka", sans-serif';
+      ctx.fillText('PIAGAM PENGHARGAAN JUARA MATEMATIKA CILIK', w / 2, 80);
+
+      ctx.fillStyle = '#0369a1';
+      ctx.font = 'bold 36px "Fredoka", sans-serif';
+      ctx.fillText('BINTANG MATEMATIKA SD', w / 2, 125);
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = 'bold 16px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('Diberikan dengan penuh rasa bangga dan gembira kepada:', w / 2, 175);
+
+      // Nama Siswa Juara
+      ctx.fillStyle = '#d97706';
+      ctx.font = 'bold 38px "Fredoka", sans-serif';
+      ctx.fillText(name.toUpperCase(), w / 2, 235);
+
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(w / 2 - 180, 250);
+      ctx.lineTo(w / 2 + 180, 250);
+      ctx.stroke();
+
+      // Isi Penghargaan
+      ctx.fillStyle = '#334155';
+      ctx.font = '15px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('Atas semangat belajar, ketekunan berhitung, dan keberhasilan gemilang', w / 2, 290);
+      ctx.fillText('dalam menaklukkan seluruh tantangan berhitung di Petualangan Rimba Angka.', w / 2, 315);
+
+      // Jumlah Bintang
+      ctx.fillStyle = '#b45309';
+      ctx.font = 'bold 20px "Fredoka", sans-serif';
+      ctx.fillText(`⭐ Total Bintang Juara: ${gameState.stars} Bintang ⭐`, w / 2, 365);
+
+      // Tanggal Hari Ini
+      const today = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+      ctx.fillStyle = '#64748b';
+      ctx.font = '13px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(`Diterbitkan pada: ${today}`, w / 2, 410);
+
+      // Stempel & Tanda Tangan
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 14px "Fredoka", sans-serif';
+      ctx.fillText('Guru / Pembina Matematika', 80, 470);
+      ctx.font = '12px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#64748b';
+      ctx.fillText('Rimba Angka Indonesia', 80, 490);
+
+      // Medali Bintang Kanan
+      ctx.beginPath();
+      ctx.arc(w - 130, 470, 36, 0, Math.PI * 2);
+      ctx.fillStyle = '#fbbf24';
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#d97706';
+      ctx.stroke();
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#78350f';
+      ctx.font = 'bold 12px "Fredoka", sans-serif';
+      ctx.fillText('JUARA', w - 130, 465);
+      ctx.fillText('100%', w - 130, 482);
+    }
+
+    function downloadCertificate() {
+      playSfxPop();
+      const canvas = document.getElementById('certCanvas');
+      if (!canvas) return;
+      const link = document.createElement('a');
+      link.download = `Piagam_Matematika_SD_${(gameState.playerName || 'Juara').replace(/\s+/g, '_')}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    /* ==========================================
+       10. EFEK SELEBRASI CONFETTI RAMAH ANAK
+       ========================================== */
+    let confettiParticles = [];
+    let confettiAnim = null;
+
+    function triggerConfetti() {
+      const canvas = document.getElementById('confettiCanvas');
+      if (!canvas) return;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const ctx = canvas.getContext('2d');
+
+      const colors = ['#f59e0b', '#38bdf8', '#4ade80', '#ec4899', '#a855f7', '#fbbf24'];
+      confettiParticles = [];
+
+      for (let i = 0; i < 90; i++) {
+        confettiParticles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height * 0.3 - 40,
+          w: Math.random() * 10 + 6,
+          h: Math.random() * 8 + 6,
+          vx: (Math.random() - 0.5) * 6,
+          vy: Math.random() * 4 + 3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 12
+        });
+      }
+
+      if (confettiAnim) cancelAnimationFrame(confettiAnim);
+
+      let frame = 0;
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        frame++;
+
+        confettiParticles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rotation += p.rotSpeed;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        });
+
+        if (frame < 120) {
+          confettiAnim = requestAnimationFrame(animate);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      animate();
+    }
+
+    /* ==========================================
+       11. INISIALISASI
+       ========================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      loadGame();
+    });
+  </script>
+</body>
+</html>
